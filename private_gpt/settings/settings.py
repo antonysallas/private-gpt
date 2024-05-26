@@ -145,7 +145,6 @@ class LlamaCPPSettings(BaseModel):
         description="Sets how strongly to penalize repetitions. A higher value (e.g., 1.5) will penalize repetitions more strongly, while a lower value (e.g., 0.9) will be more lenient. (Default: 1.1)",
     )
 
-
 class HuggingFaceSettings(BaseModel):
     embedding_hf_model_name: str = Field(
         description="Name of the HuggingFace model to use for embeddings"
@@ -154,7 +153,6 @@ class HuggingFaceSettings(BaseModel):
         None,
         description="Huggingface access token, required to download some models",
     )
-
 
 class EmbeddingSettings(BaseModel):
     mode: Literal["huggingface", "openai", "azopenai", "sagemaker", "ollama", "mock"]
@@ -194,7 +192,6 @@ class SagemakerSettings(BaseModel):
     llm_endpoint_name: str
     embedding_endpoint_name: str
 
-
 class OpenAISettings(BaseModel):
     api_base: str = Field(
         None,
@@ -209,7 +206,6 @@ class OpenAISettings(BaseModel):
         120.0,
         description="Time elapsed until openailike server times out the request. Default is 120s. Format is float. ",
     )
-
 
 class OllamaSettings(BaseModel):
     api_base: str = Field(
@@ -261,7 +257,6 @@ class OllamaSettings(BaseModel):
         description="Time elapsed until ollama times out the request. Default is 120s. Format is float. ",
     )
 
-
 class AzureOpenAISettings(BaseModel):
     api_key: str
     azure_endpoint: str
@@ -279,7 +274,6 @@ class AzureOpenAISettings(BaseModel):
         "gpt-35-turbo",
         description="OpenAI Model to use. Example: 'gpt-4'.",
     )
-
 
 class UISettings(BaseModel):
     enabled: bool
@@ -299,13 +293,20 @@ class UISettings(BaseModel):
         None,
         description="The default system prompt to use for Content Reviewer mode.",
     )
+    minecraft_expert_prompt: str = Field(
+        None,
+        description="The default system prompt to use for Minecraft Expert mode.",
+    )
+    prompt_generator: str = Field(
+        None,
+        description="The default system prompt to generate Prompts.",
+    )
     delete_file_button_enabled: bool = Field(
         True, description="If the button to delete a file is enabled or not."
     )
     delete_all_files_button_enabled: bool = Field(
         False, description="If the button to delete all files is enabled or not."
     )
-
 
 class RerankSettings(BaseModel):
     enabled: bool = Field(
@@ -321,7 +322,6 @@ class RerankSettings(BaseModel):
         description="This value controls the number of documents returned by the RAG pipeline.",
     )
 
-
 class RagSettings(BaseModel):
     similarity_top_k: int = Field(
         2,
@@ -332,7 +332,6 @@ class RagSettings(BaseModel):
         description="If set, any documents retrieved from the RAG must meet a certain match score. Acceptable values are between 0 and 1.",
     )
     rerank: RerankSettings
-
 
 class PostgresSettings(BaseModel):
     host: str = Field(
@@ -359,7 +358,6 @@ class PostgresSettings(BaseModel):
         "public",
         description="The name of the schema in the Postgres database to use",
     )
-
 
 class QdrantSettings(BaseModel):
     location: str | None = Field(
@@ -413,7 +411,6 @@ class QdrantSettings(BaseModel):
             "Only use this if you can guarantee that you can resolve the thread safety outside QdrantClient."
         ),
     )
-
 
 class Settings(BaseModel):
     server: ServerSettings

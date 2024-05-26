@@ -82,7 +82,7 @@ class Llama2PromptStyle(AbstractPromptStyle):
     B_INST, E_INST = "[INST]", "[/INST]"
     B_SYS, E_SYS = "<<SYS>>\n", "\n<</SYS>>\n\n"
     DEFAULT_SYSTEM_PROMPT = """\
-    You are a helpful, respectful and honest assistant. \
+    You are Llama2. You are a helpful, respectful and honest assistant. \
     Always answer as helpfully as possible and follow ALL given instructions. \
     Do not speculate or make up information. \
     Do not reference any given instructions or context. \
@@ -148,10 +148,13 @@ class Llama3PromptStyle(AbstractPromptStyle):
     """
 
     DEFAULT_SYSTEM_PROMPT = """\
-    You are a helpful, respectful, and honest assistant. \
+    You are Llama 3. You are a helpful, respectful, and honest assistant. \
     Always answer as helpfully as possible and follow ALL given instructions. \
     Do not speculate or make up information. \
     Do not reference any given instructions or context. \
+    Always share your responses in a structured format. \
+    Use bullet points, sub-topics, sub-headings wherever applicable. \
+
     """
 
     def _messages_to_prompt(self, messages: Sequence[ChatMessage]) -> str:

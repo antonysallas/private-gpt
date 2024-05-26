@@ -29,11 +29,12 @@ THIS_DIRECTORY_RELATIVE = Path(__file__).parent.relative_to(PROJECT_ROOT_PATH)
 # Should be "private_gpt/ui/avatar-bot.ico"
 AVATAR_BOT = THIS_DIRECTORY_RELATIVE / "avatar-bot.ico"
 
-UI_TAB_TITLE = "My Private GPT"
+UI_TAB_TITLE = "Sallas GPT"
 
 SOURCES_SEPARATOR = "\n\n Sources: \n"
 
-MODES = ["Query Files", "Search Files", "LLM Chat (no context from files)"]
+MODES = ["Query Files", "Search Files", "LLM Chat (no context from files)", "Architect", "Content Reviewer", "Minecraft Expert", "Prompt Generator"]
+
 
 
 class Source(BaseModel):
@@ -184,6 +185,33 @@ class PrivateGptUi:
                     f"{source.text}"
                     for index, source in enumerate(sources, start=1)
                 )
+            case "Architect":
+                llm_stream = self._chat_service.stream_chat(
+                    messages=all_messages,
+                    use_context=False,
+                )
+                yield from yield_deltas(llm_stream)
+
+            case "Content Reviewer":
+                llm_stream = self._chat_service.stream_chat(
+                    messages=all_messages,
+                    use_context=False,
+                )
+                yield from yield_deltas(llm_stream)
+
+            case "Minecraft Expert":
+                llm_stream = self._chat_service.stream_chat(
+                    messages=all_messages,
+                    use_context=False,
+                )
+                yield from yield_deltas(llm_stream)
+
+            case "Prompt Generator":
+                llm_stream = self._chat_service.stream_chat(
+                    messages=all_messages,
+                    use_context=False,
+                )
+                yield from yield_deltas(llm_stream)
 
     # On initialization and on mode change, this function set the system prompt
     # to the default prompt based on the mode (and user settings).
