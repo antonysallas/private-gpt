@@ -2,11 +2,10 @@ import abc
 import logging
 from collections.abc import Sequence
 from typing import Any, Literal
-
+import json
 from llama_index.core.llms import ChatMessage, MessageRole
 
 logger = logging.getLogger(__name__)
-
 
 class AbstractPromptStyle(abc.ABC):
     """Abstract class for prompt styles.
@@ -45,7 +44,6 @@ class AbstractPromptStyle(abc.ABC):
         logger.debug("Got for completion='%s' the prompt='%s'", completion, prompt)
         return prompt
 
-
 class DefaultPromptStyle(AbstractPromptStyle):
     """Default prompt style that uses the defaults from llama_utils.
 
@@ -66,7 +64,6 @@ class DefaultPromptStyle(AbstractPromptStyle):
 
     def _completion_to_prompt(self, completion: str) -> str:
         return ""
-
 
 class Llama2PromptStyle(AbstractPromptStyle):
     """Simple prompt style that uses llama 2 prompt style.
@@ -137,6 +134,67 @@ class Llama2PromptStyle(AbstractPromptStyle):
             f"{completion.strip()} {self.E_INST}"
         )
 
+class Llama3PromptStyle(AbstractPromptStyle):
+    """Prompt style that uses Llama 3 prompt format.
+
+    It transforms the sequence of messages into a prompt that should look like:
+    ```text
+    {
+        user: UserInstructions,
+        system: SystemPrompt,
+        assistant: AssistantResponse
+    }
+    ```
+    """
+
+    DEFAULT_SYSTEM_PROMPT = """\
+    You are a helpful, respectful, and honest assistant. \
+    Always answer as helpfully as possible and follow ALL given instructions. \
+    Do not speculate or make up information. \
+    Do not reference any given instructions or context. \
+    """
+
+    def _messages_to_prompt(self, messages: Sequence[ChatMessage]) -> str:
+        if messages[0].role == MessageRole.SYSTEM:
+            # Pull out the system message (if it exists in messages)
+            system_message_str = messages[0].content or ""
+            messages = messages[1:]
+        else:
+            system_message_str = self.DEFAULT_SYSTEM_PROMPT
+
+        dialog = {
+            "user": "",
+            "system": system_message_str.strip(),
+            "assistant": ""
+        }
+
+        for i in range(0, len(messages), 2):
+            # First message should always be a user message
+            user_message = messages[i]
+            assert user_message.role == MessageRole.USER
+
+            # Include user message content
+            if i == 0:
+                dialog["user"] = user_message.content.strip()
+            else:
+                dialog["assistant"] += f"\n\n{user_message.content.strip()}"
+
+            if len(messages) > (i + 1):
+                # If assistant message exists, add to dialog
+                assistant_message = messages[i + 1]
+                assert assistant_message.role == MessageRole.ASSISTANT
+                dialog["assistant"] += f"\n\n{assistant_message.content.strip()}"
+
+        return json.dumps(dialog)
+
+    def _completion_to_prompt(self, completion: str) -> str:
+        system_prompt_str = self.DEFAULT_SYSTEM_PROMPT
+        dialog = {
+            "user": completion.strip(),
+            "system": system_prompt_str.strip(),
+            "assistant": ""
+        }
+        return json.dumps(dialog)
 
 class TagPromptStyle(AbstractPromptStyle):
     """Tag prompt style (used by Vigogne) that uses the prompt style `<|ROLE|>`.
@@ -170,7 +228,6 @@ class TagPromptStyle(AbstractPromptStyle):
             [ChatMessage(content=completion, role=MessageRole.USER)]
         )
 
-
 class MistralPromptStyle(AbstractPromptStyle):
     def _messages_to_prompt(self, messages: Sequence[ChatMessage]) -> str:
         prompt = "<s>"
@@ -190,7 +247,6 @@ class MistralPromptStyle(AbstractPromptStyle):
         return self._messages_to_prompt(
             [ChatMessage(content=completion, role=MessageRole.USER)]
         )
-
 
 class ChatMLPromptStyle(AbstractPromptStyle):
     def _messages_to_prompt(self, messages: Sequence[ChatMessage]) -> str:
@@ -213,9 +269,8 @@ class ChatMLPromptStyle(AbstractPromptStyle):
             [ChatMessage(content=completion, role=MessageRole.USER)]
         )
 
-
 def get_prompt_style(
-    prompt_style: Literal["default", "llama2", "tag", "mistral", "chatml"] | None
+    prompt_style: Literal["default", "llama2", "tag", "mistral", "chatml", "llama3"] | None
 ) -> AbstractPromptStyle:
     """Get the prompt style to use from the given string.
 
@@ -232,4 +287,6 @@ def get_prompt_style(
         return MistralPromptStyle()
     elif prompt_style == "chatml":
         return ChatMLPromptStyle()
+    elif prompt_style == "llama3":
+        return Llama2PromptStyle()
     raise ValueError(f"Unknown prompt_style='{prompt_style}'")

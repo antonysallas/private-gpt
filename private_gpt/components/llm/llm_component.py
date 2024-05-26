@@ -57,7 +57,7 @@ class LLMComponent:
                     "top_k": settings.llamacpp.top_k,  # ollama and llama-cpp
                     "top_p": settings.llamacpp.top_p,  # ollama and llama-cpp
                     "repeat_penalty": settings.llamacpp.repeat_penalty,  # ollama llama-cpp
-                    "n_gpu_layers": -1,
+                    "n_gpu_layers": 10, # "n_gpu_layers": -1,
                     "offload_kqv": True,
                 }
                 self.llm = LlamaCPP(

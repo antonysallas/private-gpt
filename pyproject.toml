@@ -12,7 +12,7 @@ python-multipart = "^0.0.9"
 injector = "^0.21.0"
 pyyaml = "^6.0.1"
 watchdog = "^4.0.0"
-transformers = "^4.38.2"
+transformers = "4.37.0"
 docx2txt = "^0.8"
 cryptography = "^3.1"
 # LlamaIndex core libs
@@ -46,6 +46,8 @@ sentence-transformers = {version ="^2.6.1", optional = true}
 
 # Optional UI
 gradio = {version ="^4.19.2", optional = true}
+llama-index = "^0.10.39"
+tokenizers = "0.15.2"
 
 [tool.poetry.extras]
 ui = ["gradio"]

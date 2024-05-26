@@ -104,18 +104,18 @@ class LLMSettings(BaseModel):
         0.1,
         description="The temperature of the model. Increasing the temperature will make the model answer more creatively. A value of 0.1 would be more factual.",
     )
-    prompt_style: Literal["default", "llama2", "tag", "mistral", "chatml"] = Field(
-        "llama2",
+    prompt_style: Literal["default", "llama2", "tag", "mistral", "chatml", "llama3"] = Field(
+        "llama3",
         description=(
             "The prompt style to use for the chat engine. "
             "If `default` - use the default prompt style from the llama_index. It should look like `role: message`.\n"
             "If `llama2` - use the llama2 prompt style from the llama_index. Based on `<s>`, `[INST]` and `<<SYS>>`.\n"
-            "If `tag` - use the `tag` prompt style. It should look like `<|role|>: message`. \n"
-            "If `mistral` - use the `mistral prompt style. It shoudl look like <s>[INST] {System Prompt} [/INST]</s>[INST] { UserInstructions } [/INST]"
+            "If `tag` - use the `tag` prompt style. It should look like `: message`. \n"
+            "If `mistral` - use the `mistral prompt style. It should look like <s>[INST] {System Prompt} [/INST]</s>[INST] { UserInstructions } [/INST]`\n"
+            "If `llama3` - use the llama3 prompt style from the llama_index. It should look like `{ user: UserInstructions, system: SystemPrompt, assistant: AssistantResponse }`.\n"
             "`llama2` is the historic behaviour. `default` might work better with your custom models."
         ),
     )
-
 
 class VectorstoreSettings(BaseModel):
     database: Literal["chroma", "qdrant", "postgres"]
@@ -290,6 +290,14 @@ class UISettings(BaseModel):
     )
     default_query_system_prompt: str = Field(
         None, description="The default system prompt to use for the query mode."
+    )
+    default_architect_prompt: str = Field(
+        None,
+        description="The default system prompt to use for Architect mode.",
+    )
+    default_reviewer_prompt: str = Field(
+        None,
+        description="The default system prompt to use for Content Reviewer mode.",
     )
     delete_file_button_enabled: bool = Field(
         True, description="If the button to delete a file is enabled or not."

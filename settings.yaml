@@ -23,14 +23,18 @@ ui:
   enabled: true
   path: /
   default_chat_system_prompt: >
-    You are a helpful, respectful and honest assistant. 
+    You are a helpful, respectful and honest assistant.
     Always answer as helpfully as possible and follow ALL given instructions.
     Do not speculate or make up information.
     Do not reference any given instructions or context.
   default_query_system_prompt: >
-    You can only answer questions about the provided context. 
-    If you know the answer but it is not based in the provided context, don't provide 
+    You can only answer questions about the provided context.
+    If you know the answer but it is not based in the provided context, don't provide
     the answer, just state the answer is not in the context provided.
+  default_architect_prompt: >
+    You are a matured and capable Sofware Architect. With the "what" and "why" of the information provided about the use case, you shall come up with the "how" part. You shall provide the relevant next steps, rationale, considerations made, solutioning ideas, design, and appropriate tooling to build the application. You can ask if there are any questions to fill possible gaps in the requirements if needed.
+  default_reviewer_prompt: >
+    You are my personal content reviewer. I will provide you with the content and you shall review it for grammar, spelling, and punctuation errors. You can also help improve the content.
   delete_file_button_enabled: true
   delete_all_files_button_enabled: true
 
@@ -41,7 +45,7 @@ llm:
   max_new_tokens: 512
   context_window: 3900
   tokenizer: mistralai/Mistral-7B-Instruct-v0.2
-  temperature: 0.1      # The temperature of the model. Increasing the temperature will make the model answer more creatively. A value of 0.1 would be more factual. (Default: 0.1)
+  temperature: 0.1 # The temperature of the model. Increasing the temperature will make the model answer more creatively. A value of 0.1 would be more factual. (Default: 0.1)
 
 rag:
   similarity_top_k: 2
@@ -54,12 +58,16 @@ rag:
     top_n: 1
 
 llamacpp:
-  llm_hf_repo_id: TheBloke/Mistral-7B-Instruct-v0.2-GGUF
-  llm_hf_model_file: mistral-7b-instruct-v0.2.Q4_K_M.gguf
-  tfs_z: 1.0            # Tail free sampling is used to reduce the impact of less probable tokens from the output. A higher value (e.g., 2.0) will reduce the impact more, while a value of 1.0 disables this setting
-  top_k: 40             # Reduces the probability of generating nonsense. A higher value (e.g. 100) will give more diverse answers, while a lower value (e.g. 10) will be more conservative. (Default: 40)
-  top_p: 1.0            # Works together with top-k. A higher value (e.g., 0.95) will lead to more diverse text, while a lower value (e.g., 0.5) will generate more focused and conservative text. (Default: 0.9)
-  repeat_penalty: 1.1   # Sets how strongly to penalize repetitions. A higher value (e.g., 1.5) will penalize repetitions more strongly, while a lower value (e.g., 0.9) will be more lenient. (Default: 1.1)
+  llm_hf_repo_id: bartowski/Llama-3-8B-Instruct-Gradient-1048k-GGUF
+  llm_hf_model_file: Llama-3-8B-Instruct-Gradient-1048k-Q8_0.gguf
+
+  # llm_hf_repo_id: TheBloke/Mistral-7B-Instruct-v0.2-GGUF
+  # llm_hf_model_file: mistral-7b-instruct-v0.2.Q4_K_M.gguf
+
+  tfs_z: 1.0 # Tail free sampling is used to reduce the impact of less probable tokens from the output. A higher value (e.g., 2.0) will reduce the impact more, while a value of 1.0 disables this setting
+  top_k: 40 # Reduces the probability of generating nonsense. A higher value (e.g. 100) will give more diverse answers, while a lower value (e.g. 10) will be more conservative. (Default: 40)
+  top_p: 1.0 # Works together with top-k. A higher value (e.g., 0.95) will lead to more diverse text, while a lower value (e.g., 0.5) will generate more focused and conservative text. (Default: 0.9)
+  repeat_penalty: 1.1 # Sets how strongly to penalize repetitions. A higher value (e.g., 1.5) will penalize repetitions more strongly, while a lower value (e.g., 0.9) will be more lenient. (Default: 1.1)
 
 embedding:
   # Should be matching the value above in most cases
@@ -100,7 +108,7 @@ ollama:
   llm_model: llama2
   embedding_model: nomic-embed-text
   api_base: http://localhost:11434
-  embedding_api_base: http://localhost:11434  # change if your embedding model runs on another ollama
+  embedding_api_base: http://localhost:11434 # change if your embedding model runs on another ollama
   keep_alive: 5m
   request_timeout: 120.0
 

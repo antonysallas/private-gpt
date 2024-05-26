@@ -29,3 +29,54 @@ __pycache__/
 
 # macOS
 .DS_Store
+
+.venv*
+.env
+venv
+
+settings-me.yaml
+
+.ruff_cache
+.pytest_cache
+.mypy_cache
+
+# byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# unit tests / coverage reports
+/tests-results.xml
+/.coverage
+/coverage.xml
+/htmlcov/
+
+# pyenv
+/.python-version
+
+# IDE
+.idea/
+.vscode/
+/.run/
+.fleet/
+
+# macOS
+.DS_Store
+
+# Exclude files with numerical extension
+*.[0-9]*
+.*.[0-9]*
+*.notworking
+
+.venv*
+
+models/
+logs/
+
+# Machine Learning models
+*.h5
+*.pkl
+*.joblib
+*.gguf
+*.bin
+
+local_data/*

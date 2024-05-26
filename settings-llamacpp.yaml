@@ -1,0 +1,27 @@
+# poetry install --extras "ui llms-llama-cpp vector-stores-qdrant embeddings-huggingface"
+server:
+  env_name: ${APP_ENV:local}
+
+llm:
+  mode: llamacpp
+  # Should be matching the selected model
+  max_new_tokens: 3000
+  context_window: 16384
+  tokenizer: meta-llama/Meta-Llama-3-8B-Instruct
+  prompt_style: "llama3"
+
+llamacpp:
+  llm_hf_repo_id: bartowski/Llama-3-8B-Instruct-Gradient-1048k-GGUF
+  llm_hf_model_file: Llama-3-8B-Instruct-Gradient-1048k-Q8_0.gguf
+
+embedding:
+  mode: huggingface
+
+huggingface:
+  embedding_hf_model_name: BAAI/bge-m3
+
+vectorstore:
+  database: qdrant
+
+qdrant:
+  path: local_data/private_gpt/qdrant

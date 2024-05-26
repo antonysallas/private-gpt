@@ -5,6 +5,7 @@ from private_gpt.components.llm.prompt_helper import (
     ChatMLPromptStyle,
     DefaultPromptStyle,
     Llama2PromptStyle,
+    Llama3PromptStyle,
     MistralPromptStyle,
     TagPromptStyle,
     get_prompt_style,
@@ -19,6 +20,7 @@ from private_gpt.components.llm.prompt_helper import (
         ("tag", TagPromptStyle),
         ("mistral", MistralPromptStyle),
         ("chatml", ChatMLPromptStyle),
+        ("llama3", Llama3PromptStyle)
     ],
 )
 def test_get_prompt_style_success(prompt_style, expected_prompt_style):
